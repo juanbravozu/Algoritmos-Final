@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="src/mquevedojbravo/core.jar"/>
+	<classpathentry kind="lib" path="libs/javamp3-1.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/jsyn-20171016.jar"/>
+	<classpathentry kind="lib" path="libs/sound.jar"/>
+	<classpathentry kind="lib" path="C:/Users/juand/Documents/Processing/libraries/LeapMotionForProcessing/library/LeapJava.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/juand/Documents/Processing/libraries/LeapMotionForProcessing/library/windows64"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/juand/Documents/Processing/libraries/LeapMotionForProcessing/library/LeapMotionForProcessing.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
