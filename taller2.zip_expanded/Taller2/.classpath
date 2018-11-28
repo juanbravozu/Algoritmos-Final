@@ -6,11 +6,11 @@
 	<classpathentry kind="lib" path="libs/javamp3-1.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/jsyn-20171016.jar"/>
 	<classpathentry kind="lib" path="libs/sound.jar"/>
-	<classpathentry kind="lib" path="C:/Users/juand/Documents/Processing/libraries/LeapMotionForProcessing/library/LeapJava.jar">
+	<classpathentry kind="lib" path="libs/LeapJava.jar">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Users/juand/Documents/Processing/libraries/LeapMotionForProcessing/library/windows64"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="Taller2/libs/windows64"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/juand/Documents/Processing/libraries/LeapMotionForProcessing/library/LeapMotionForProcessing.jar"/>
+	<classpathentry kind="lib" path="libs/LeapMotionForProcessing.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
