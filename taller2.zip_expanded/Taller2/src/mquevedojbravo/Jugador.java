@@ -18,17 +18,23 @@ public class Jugador extends Personaje{
 	private int cometasTotal;
 	private int contOvnis;
 	private int contEfecto;
+	private int tipoJugador;
 	private boolean cometaMas;
 	private boolean cometaMenos;
 	
-	public Jugador(PApplet app) {
+	public Jugador(PApplet app, int tipo) {
 		super(app);
+		tipoJugador = tipo;
 		pos = new PVector(app.width/2, app.height/2);
 		historia = new LinkedList<PVector>();
 		historia.add(pos);
 		cometaMas = false;
 		cometaMenos = false;
-		img = app.loadImage("nave.png");
+		if(tipo == 1) {
+			img = app.loadImage("nave.png");
+		} else {
+			img = app.loadImage("nave2.png");
+		}		
 		velmax = 7f;
 		fmax = 0.3f;
 		contOvnis = 0;
@@ -64,7 +70,11 @@ public class Jugador extends Personaje{
 					PVector p = it.next();
 					int tam = 5 + (int)(i/2);
 					int opacidad = 30+(i*4);
-					app.fill(0, 193, 208, opacidad);
+					if(tipoJugador == 1) {
+						app.fill(0, 193, 208, opacidad);
+					} else {
+						app.fill(163, 6, 30, opacidad);
+					}
 					app.ellipse(p.x, p.y, tam, tam);
 					i++;
 			}

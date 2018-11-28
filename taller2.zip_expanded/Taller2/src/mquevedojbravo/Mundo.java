@@ -27,7 +27,7 @@ public class Mundo extends Thread {
 	
 	public Mundo(PApplet app) {
 		this.app = app;
-		j = new Jugador(app);
+		j = new Jugador(app, 2);
 		j.start();
 		vivo = true;
 		ganar = false;
