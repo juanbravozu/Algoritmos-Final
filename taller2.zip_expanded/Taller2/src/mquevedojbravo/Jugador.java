@@ -37,6 +37,7 @@ public class Jugador extends Personaje{
 			img = app.loadImage("nave2.png");
 			leap = new LeapMotion(app);
 		}		
+		estrellas = 0;
 		velmax = 7f;
 		fmax = 0.3f;
 		contOvnis = 0;
@@ -134,7 +135,7 @@ public class Jugador extends Personaje{
 		ac.add(direccion);
 	}
 	
-	public boolean validarObj(Recogible o) {
+	public boolean validarObj(Recogible o) {		
 		if(app.dist(pos.x, pos.y, o.getPos().x, o.getPos().y) < 28) {
 			if(o instanceof Estrella) {
 				estrellas++;
@@ -155,6 +156,8 @@ public class Jugador extends Personaje{
 			return false;
 		 }
 	}
+	
+
 	
 	public void usarCometa() {
 		if(estrellas >= 5 && cometa > 0) {
