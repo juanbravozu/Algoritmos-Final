@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="src/mquevedojbravo/core.jar"/>
 	<classpathentry kind="lib" path="libs/javamp3-1.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/jsyn-20171016.jar"/>
 	<classpathentry kind="lib" path="libs/sound.jar"/>
@@ -12,5 +15,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/LeapMotionForProcessing.jar"/>
+	<classpathentry kind="lib" path="src/bravo_correa_perez_quevedo_vivas/core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
