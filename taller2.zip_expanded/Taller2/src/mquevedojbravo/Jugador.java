@@ -2,7 +2,6 @@ package mquevedojbravo;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-
 import de.voidplus.leapmotion.*;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -21,6 +20,8 @@ public class Jugador extends Personaje{
 	private int tipoJugador;
 	private boolean cometaMas;
 	private boolean cometaMenos;
+	private LeapMotion leap;
+	private PVector obj;
 	
 	public Jugador(PApplet app, int tipo) {
 		super(app);
@@ -34,7 +35,9 @@ public class Jugador extends Personaje{
 			img = app.loadImage("nave.png");
 		} else {
 			img = app.loadImage("nave2.png");
+			leap = new LeapMotion(app);
 		}		
+		estrellas = 0;
 		velmax = 7f;
 		fmax = 0.3f;
 		contOvnis = 0;
@@ -49,7 +52,17 @@ public class Jugador extends Personaje{
 	public void run() {
 		while(vivo) {
 			actualizar();
-			PVector obj = new PVector(app.mouseX, app.mouseY);
+			
+			if(tipoJugador == 1) {
+				obj = new PVector(app.mouseX, app.mouseY);
+			} else {
+				if(leap.getHands().size() > 0) {
+					Hand mano = leap.getHands().get(0);
+					obj = mano.getPosition();
+				} else {
+					obj = pos;
+				}
+			}
 			perseguir(obj);
 			efectoCometa();
 			ang = vel.heading() + app.PI/2;
@@ -84,6 +97,12 @@ public class Jugador extends Personaje{
 		app.rotate(ang);
 		app.image(img, 0, 0);
 		app.popMatrix();
+		
+		if(tipoJugador == 2) {
+			app.stroke(255, 200, 200,100);
+			app.noFill();
+			app.ellipse(obj.x, obj.y, 10, 10);
+		}
 	}
 	
 	public void actualizar() {
@@ -116,7 +135,7 @@ public class Jugador extends Personaje{
 		ac.add(direccion);
 	}
 	
-	public boolean validarObj(Recogible o) {
+	public boolean validarObj(Recogible o) {		
 		if(app.dist(pos.x, pos.y, o.getPos().x, o.getPos().y) < 28) {
 			if(o instanceof Estrella) {
 				estrellas++;
@@ -137,6 +156,8 @@ public class Jugador extends Personaje{
 			return false;
 		 }
 	}
+	
+
 	
 	public void usarCometa() {
 		if(estrellas >= 5 && cometa > 0) {

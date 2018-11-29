@@ -11,7 +11,7 @@ public class Ovni extends Personaje{
 
 	private PApplet app;
 	private Mundo m; 
-	private Jugador j;
+	private Jugador[] j;
 	private PImage ovni;
 	private float ang;
 	private PFont mali;
@@ -23,7 +23,8 @@ public class Ovni extends Personaje{
 		super(app);
 		this.m = m;
 		this.app = app;
-		vel.set(m.getJ().getPos());
+		j = m.getJ();
+		vel.set(j[0].getPos());
 		mali = app.loadFont("maliB_18.vlw");
 		
 		int random = (int)app.random(4);
@@ -58,25 +59,30 @@ public class Ovni extends Personaje{
 	public void run() {
 		while(vivo) {
 			try {
-				if(estrellas > m.getJ().getEstrellas()) {
-					velmax = 5;
-					fmax = 0.2f;
-					perseguirJugador();
-				} else if(estrellas < m.getJ().getEstrellas()){					
-					if(app.dist(pos.x, pos.y, m.getJ().getPos().x, m.getJ().getPos().y) < 125) {
-						velmax = 10;
-						fmax = 0.4f;
-						huir(m.getJ().getPos());
-						huir = true;
-					} else {
+				int i;
+				if(app.dist(j[0].getPos().x, j[0].getPos().y, pos.x, pos.y) < app.dist(pos.x, pos.y, j[1].getPos().x, j[1].getPos().y)) {
+					i = 0;
+				} else {
+					i = 1;
+				}
+					if(estrellas > j[i].getEstrellas()) {
 						velmax = 5;
 						fmax = 0.2f;
+						perseguirJugador(j[i]);
+					} else if(estrellas < j[i].getEstrellas()){					
+						if(app.dist(pos.x, pos.y, j[i].getPos().x, j[i].getPos().y) < 125) {
+							velmax = 10;
+							fmax = 0.4f;
+							huir(j[i].getPos(), j[i]);
+							huir = true;
+						} else {
+							velmax = 5;
+							fmax = 0.2f;
+							buscarObj();
+						}
+					} else {
 						buscarObj();
 					}
-				} else {
-					buscarObj();
-				}
-				
 				mover();
 				actualizar();
 				
@@ -119,15 +125,20 @@ public class Ovni extends Personaje{
 				if(app.dist(pos.x, pos.y, o.getPos().x, o.getPos().y) < 25) {
 					if(o instanceof Estrella) {
 						estrellas++;
-					} else if(o instanceof Agujero) {
-						if(m.getJ().getEstrellas() - 15 >= 0 ) {
-							m.getJ().setEstrella(m.getJ().getEstrellas()-15);
-						} else {
-							m.getJ().setEstrella(0);
+					} else  {
+						for(int i = 0; i < 2; i++) {
+							if(o instanceof Agujero) {
+							
+								if(j[i].getEstrellas() - 15 >= 0 ) {
+									j[i].setEstrella(j[i].getEstrellas()-15);
+								} else {
+									j[i].setEstrella(0);
+								}
+							} else if(o instanceof Cometa) {
+								j[i].setCometaMenos(true);
+								j[i].setContEfecto(app.millis()+5000);
+							}
 						}
-					} else if(o instanceof Cometa) {
-						m.getJ().setCometaMenos(true);
-						m.getJ().setContEfecto(app.millis()+5000);
 					}
 					m.getObjetos().remove(o);
 				}
@@ -135,7 +146,7 @@ public class Ovni extends Personaje{
 		}
 	}
 	
-	public void huir(PVector obj) {
+	public void huir(PVector obj, Jugador j) {
 		PVector objetivo = new PVector();
 		objetivo.set(obj);
 		objetivo.set(-objetivo.x, -objetivo.y);
@@ -147,24 +158,24 @@ public class Ovni extends Personaje{
 		ac.add(direccion);
 		
 		synchronized(m.getOvnis()) {
-		if(app.dist(m.getJ().getPos().x, m.getJ().getPos().y, pos.x, pos.y) < 45) {
-			m.getJ().setEstrella(m.getJ().getEstrellas()+2);
-			m.getJ().setEstrellasTotal(m.getJ().getEstrellasTotal()+2);
-			m.getJ().setContOvnis(m.getJ().getContOvnis()+1);
+		if(app.dist(j.getPos().x, j.getPos().y, pos.x, pos.y) < 45) {
+			j.setEstrella(j.getEstrellas()+2);
+			j.setEstrellasTotal(j.getEstrellasTotal()+2);
+			j.setContOvnis(j.getContOvnis()+1);
 			vivo = false;
 			m.getOvnis().remove(this);
 			}
 		}
 	}
 	
-	public void perseguirJugador() {
-		perseguir(m.getJ().getPos());
-		if(app.dist(m.getJ().getPos().x, m.getJ().getPos().y, pos.x, pos.y) < 45 && atacar > 60) {
-			if(m.getJ().getEstrellas() > 0) {
-				if(m.getJ().getEstrellas()-5 >= 0) {
-					m.getJ().setEstrella(m.getJ().getEstrellas()-5);					
+	public void perseguirJugador(Jugador j) {
+		perseguir(j.getPos());
+		if(app.dist(j.getPos().x, j.getPos().y, pos.x, pos.y) < 45 && atacar > 60) {
+			if(j.getEstrellas() > 0) {
+				if(j.getEstrellas()-5 >= 0) {
+					j.setEstrella(j.getEstrellas()-5);					
 				} else {
-					m.getJ().setEstrella(0);
+					j.setEstrella(0);
 				}
 			} else {
 				m.setMatar(true);

@@ -66,20 +66,20 @@ public class Logica {
 					pantalla = 7;
 				}
 				m.pararMus();
-				estrellas = m.getJ().getEstrellasTotal();
-				contOvnis = m.getJ().getContOvnis();
-				agujeros = m.getJ().getAgujerosTotal();
-				cometas = m.getJ().getCometasTotal();
+				estrellas = m.getJu().getEstrellasTotal();
+				contOvnis = m.getJu().getContOvnis();
+				agujeros = m.getJu().getAgujerosTotal();
+				cometas = m.getJu().getCometasTotal();
 				m = null;
 				soundMenu.loop();
 			}
 			if(m != null && m.getMatar()) {
 				m.pararMus();
 				pantalla = 7;
-				estrellas = m.getJ().getEstrellasTotal();
-				contOvnis = m.getJ().getContOvnis();
-				agujeros = m.getJ().getAgujerosTotal();
-				cometas = m.getJ().getCometasTotal();
+				estrellas = m.getJu().getEstrellasTotal();
+				contOvnis = m.getJu().getContOvnis();
+				agujeros = m.getJu().getAgujerosTotal();
+				cometas = m.getJu().getCometasTotal();
 				m = null;
 				soundMenu.loop();
 			}

@@ -11,7 +11,7 @@ import processing.sound.SoundFile;
 public class Mundo extends Thread {
 
 	private PApplet app;
-	private Jugador j;
+	private Jugador[] j;
 	private PImage fondo;
 	private PImage interfaz;
 	private LinkedList<Ovni> ovnis;
@@ -27,8 +27,11 @@ public class Mundo extends Thread {
 	
 	public Mundo(PApplet app) {
 		this.app = app;
-		j = new Jugador(app, 2);
-		j.start();
+		j = new Jugador[2];
+		j[0] = new Jugador(app, 1);
+		j[0].start();
+		j[1] = new Jugador(app, 2);
+		j[1].start();
 		vivo = true;
 		ganar = false;
 		matar = false;
@@ -49,7 +52,8 @@ public class Mundo extends Thread {
 	
 	public void pintar() {
 		app.image(fondo, app.width/2, app.height/2);
-		j.pintar();
+		j[0].pintar();
+		j[1].pintar();
 		//Pintar Ovnis
 		synchronized(ovnis) {
 			Iterator<Ovni> it = ovnis.iterator();
@@ -70,9 +74,17 @@ public class Mundo extends Thread {
 		app.textAlign(app.CORNER, app.CENTER);
 		app.textFont(mali);
 		app.fill(255);
-		app.text(j.getEstrellas(), 1150.81f, 556.21f);
-		app.text(j.getAgujero(),  1150.81f, 595.71f);
-		app.text(j.getCometa(),  1150.81f, 632.5f);
+		app.text(j[0].getEstrellas(), 1150.81f, 556.21f);
+		app.text(j[0].getAgujero(),  1150.81f, 595.71f);
+		app.text(j[0].getCometa(),  1150.81f, 632.5f);
+	
+		
+		app.fill(255, 200, 200);
+		app.text(j[1].getEstrellas(), 1180.81f, 556.21f);
+		app.text(j[1].getAgujero(),  1180.81f, 595.71f);
+		app.text(j[1].getCometa(),  1180.81f, 632.5f);
+		app.fill(255);
+		
 		//Tiempo
 		int seg = (contadorTiempo - app.millis())/1000;
 		int min = seg/60;
@@ -115,7 +127,7 @@ public class Mundo extends Thread {
 				Iterator<Recogible> it = objetos.iterator();
 				while(it.hasNext()) {
 					Recogible o = it.next();
-					if(j.validarObj(o)) {
+					if(j[0].validarObj(o) || j[1].validarObj(o)) {
 						it.remove();
 					}
 					
@@ -152,7 +164,7 @@ public class Mundo extends Thread {
 					o = obj;
 				}
 			}
-			if(o.getEstrellas() - j.getEstrellas() <= 0) {
+			if(o.getEstrellas() - j[0].getEstrellas() <= 0) {
 				ganar = true;
 			}
 			
@@ -169,7 +181,10 @@ public class Mundo extends Thread {
 	}
 	
 	public void tecla() {
-		if(app.key == '2' && j.usarAgujero()) {
+		if(app.keyCode == app.RIGHT) {
+			System.out.println(j[1].getEstrellas());
+		}
+		if(app.key == '2' && (j[0].usarAgujero() || j[1].usarAgujero())) {
 			for(Ovni o : ovnis) {
 				o.setVivo(false);
 			}
@@ -177,7 +192,8 @@ public class Mundo extends Thread {
 		}
 		
 		if(app.key == '1') {
-			j.usarCometa();
+			j[0].usarCometa();
+			j[1].usarCometa();
 		}
 	}
 	
@@ -191,8 +207,12 @@ public class Mundo extends Thread {
 		return ovnis;
 	}
 	
-	public Jugador getJ() {
+	public Jugador[] getJ() {
 		return j;
+	}
+	
+	public Jugador getJu() {
+		return j[0];
 	}
 	
 	public boolean getGanar() {
@@ -205,5 +225,5 @@ public class Mundo extends Thread {
 	public void setMatar(boolean b) {
 		 matar = b;
 	}
-	
 }
+	
