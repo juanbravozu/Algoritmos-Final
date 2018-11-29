@@ -1,4 +1,4 @@
-package mquevedojbravo;
+package bravo_correa_perez_quevedo_vivas;
 
 import processing.core.PApplet;
 import processing.core.PFont;
@@ -8,7 +8,7 @@ import processing.sound.SoundFile;
 public class Logica {
 
 	private PApplet app;
-	private Mundo m;
+	private MundoCooperativo m;
 	private int pantalla;
 	private PImage[] menus;
 	private SoundFile soundMenu;
@@ -52,7 +52,7 @@ public class Logica {
 		
 		case 1:
 			if(m == null) {
-				m = new Mundo(app);
+				m = new MundoCooperativo(app);
 				m.start();
 			}
 			m.pintar();

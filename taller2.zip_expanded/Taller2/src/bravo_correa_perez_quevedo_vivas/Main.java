@@ -1,4 +1,4 @@
-package mquevedojbravo;
+package bravo_correa_perez_quevedo_vivas;
 
 import processing.core.PApplet;
 
@@ -7,7 +7,7 @@ public class Main extends PApplet {
 	private Logica log;
 	
 	public static void main(String[] args) {
-		PApplet.main("mquevedojbravo.Main");
+		PApplet.main("bravo_correa_perez_quevedo_vivas.Main");
 	}
 	
 	public void settings() {
