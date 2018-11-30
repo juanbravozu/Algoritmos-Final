@@ -8,14 +8,22 @@ import processing.sound.SoundFile;
 public class Logica {
 
 	private PApplet app;
-	private MundoCooperativo m;
+	private Mundo m;
 	private int pantalla;
 	private PImage[] menus;
 	private SoundFile soundMenu;
 	private int estrellas;
+	private int estrellas1;
+	private int estrellas2;
 	private int contOvnis;
+	private int contOvnis1;
+	private int contOvnis2;
 	private int cometas;
+	private int cometas1;
+	private int cometas2;
 	private int agujeros;
+	private int agujeros1;
+	private int agujeros2;
 	private PFont mali;
 	
 	/**
@@ -28,6 +36,8 @@ public class Logica {
 	 * Pantalla 6 - Ganaste
 	 * Pantalla 7 - Perdiste
 	 * Pantalla 8 - Seleccion modo
+	 * Pantalla 9 - Gana Jugador 1
+	 * Pantalla 10 - Gana jugador 2
 	 */
 	
 	public Logica(PApplet app) {
@@ -35,7 +45,7 @@ public class Logica {
 		m = null;
 		pantalla = 0;
 		mali = app.loadFont("maliB_47.vlw");
-		menus = new PImage[19];
+		menus = new PImage[23];
 		for(int i = 0; i < menus.length; i++) {
 			menus[i] = app.loadImage("menu" + i + ".png");
 		}
@@ -60,26 +70,60 @@ public class Logica {
 				soundMenu.stop();
 			}
 			if(m.terminarJuego()) {
-				if(m.getGanar()) {
-					pantalla = 6;
-				}else {
-					pantalla = 7;
+				if(m instanceof MundoCooperativo) {
+					estrellas = ((MundoCooperativo)m).getEstrellasTotal();
+					contOvnis = ((MundoCooperativo)m).getContadorOvnis();
+					agujeros = m.getJ()[0].getAgujerosTotal()+m.getJ()[1].getAgujerosTotal();
+					cometas = m.getJ()[0].getCometasTotal()+m.getJ()[1].getCometasTotal();
+					if(m.getGanar()) {
+						pantalla = 6;
+					}else {
+						pantalla = 7;
+					}
+				} else {
+					estrellas1 = m.getJ()[0].getEstrellas();
+					contOvnis1 = m.getJ()[0].getContOvnis();
+					agujeros1 = m.getJ()[0].getAgujerosTotal();
+					cometas1 = m.getJ()[0].getCometasTotal();
+					
+					estrellas2 = m.getJ()[1].getEstrellas();
+					contOvnis2 = m.getJ()[1].getContOvnis();
+					agujeros2 = m.getJ()[1].getAgujerosTotal();
+					cometas2 = m.getJ()[1].getCometasTotal();
+					if(m.getGanar()) {
+						pantalla = 9;
+					} else {
+						pantalla = 10;
+					}
 				}
 				m.pararMus();
-				estrellas = m.getJu().getEstrellasTotal();
-				contOvnis = m.getJu().getContOvnis();
-				agujeros = m.getJu().getAgujerosTotal();
-				cometas = m.getJu().getCometasTotal();
 				m = null;
 				soundMenu.loop();
 			}
 			if(m != null && m.getMatar()) {
 				m.pararMus();
-				pantalla = 7;
-				estrellas = m.getJu().getEstrellasTotal();
-				contOvnis = m.getJu().getContOvnis();
-				agujeros = m.getJu().getAgujerosTotal();
-				cometas = m.getJu().getCometasTotal();
+				if(m instanceof MundoCooperativo) {
+					pantalla = 7;
+					estrellas = m.getJu().getEstrellasTotal();
+					contOvnis = m.getJu().getContOvnis();
+					agujeros = m.getJu().getAgujerosTotal();
+					cometas = m.getJu().getCometasTotal();
+				} else {
+					estrellas1 = m.getJ()[0].getEstrellas();
+					contOvnis1 = m.getJ()[0].getContOvnis();
+					agujeros1 = m.getJ()[0].getAgujerosTotal();
+					cometas1 = m.getJ()[0].getCometasTotal();
+					
+					estrellas2 = m.getJ()[1].getEstrellas();
+					contOvnis2 = m.getJ()[1].getContOvnis();
+					agujeros2 = m.getJ()[1].getAgujerosTotal();
+					cometas2 = m.getJ()[1].getCometasTotal();
+					if(estrellas1 > estrellas2) {
+						pantalla = 9;
+					} else {
+						pantalla = 10;
+					}
+				}
 				m = null;
 				soundMenu.loop();
 			}
@@ -106,7 +150,33 @@ public class Logica {
 			
 		case 8:
 			interaccionSeleccion();
+			break;
 			
+		case 9:
+			ganaJugadorUno();
+			app.text(estrellas1, 352, 276);
+			app.text(contOvnis1, 352f, 355);
+			app.text(agujeros1, 352f, 434);
+			app.text(cometas1, 352f, 512);
+			
+			app.text(estrellas2, 942, 276);
+			app.text(contOvnis2, 942, 355);
+			app.text(agujeros2, 942, 434);
+			app.text(cometas2, 942, 512);
+			break;
+			
+		case 10:
+			ganaJugadorDos();
+			app.text(estrellas1, 352, 276);
+			app.text(contOvnis1, 352f, 355);
+			app.text(agujeros1, 352f, 434);
+			app.text(cometas1, 352f, 512);
+			
+			app.text(estrellas2, 942, 276);
+			app.text(contOvnis2, 942, 355);
+			app.text(agujeros2, 942, 434);
+			app.text(cometas2, 942, 512);
+			break;
 		}
 		interInstru();
 		app.stroke(255,100);
@@ -141,6 +211,30 @@ public class Logica {
 			app.image(menus[18], posX, posY);
 		} else {
 			app.image(menus[16], posX, posY);
+		}
+	}
+	
+	public void ganaJugadorUno() {
+		int x = app.mouseX;
+		int y = app.mouseY;
+		float posX = app.width/2;
+		float posY = app.height/2;
+		if(x > 455 && x < 749 && y > 555 && y < 623) {
+			app.image(menus[20], posX, posY);
+		}else {
+			app.image(menus[19], posX, posY);
+		}
+	}
+	
+	public void ganaJugadorDos() {
+		int x = app.mouseX;
+		int y = app.mouseY;
+		float posX = app.width/2;
+		float posY = app.height/2;
+		if(x > 455 && x < 749 && y > 555 && y < 623) {
+			app.image(menus[22], posX, posY);
+		}else {
+			app.image(menus[21], posX, posY);
 		}
 	}
 	
@@ -267,12 +361,25 @@ public class Logica {
 			
 		case 8:
 			if(x > 130.64f && y > 293.47f && x < 550.62f && y < 500.89f){
-				m = new MundoCooperativo(app);
+				m = new MundoVersus(app);
 				pantalla = 1;
 			} else if(x > 649.88f && y > 293.47f && x < 1069.86f && y < 500.89f) {
 				m = new MundoCooperativo(app);
 				pantalla = 1;
 			}
+			break;
+			
+		case 9:
+			if(x > 455 && x < 749 && y > 555 && y < 623) {
+				pantalla = 0;
+			}
+			break;
+			
+		case 10:
+			if(x > 455 && x < 749 && y > 555 && y < 623) {
+				pantalla = 0;
+			}
+			break;
 		}
 	}
 	

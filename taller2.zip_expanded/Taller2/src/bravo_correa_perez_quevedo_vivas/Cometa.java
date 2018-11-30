@@ -67,6 +67,7 @@ public class Cometa extends Recogible implements Runnable {
 					int tam = 5 + i;
 					int opacidad = (i*4);
 					app.fill(214, 214, 214, opacidad);
+					app.noStroke();
 					app.ellipse(p.x, p.y, tam, tam);
 					i++;
 			}

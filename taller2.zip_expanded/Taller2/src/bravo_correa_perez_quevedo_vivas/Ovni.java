@@ -126,7 +126,9 @@ public class Ovni extends Personaje{
 				if(app.dist(pos.x, pos.y, o.getPos().x, o.getPos().y) < 25) {
 					if(o instanceof Estrella) {
 						estrellas++;
-					} else  {
+					} else  if(o instanceof Eclipse){
+						m.setContEclipse(app.millis()+5000);
+					}else {
 						for(int i = 0; i < 2; i++) {
 							if(o instanceof Agujero) {
 								if(modo == 0) {
@@ -168,9 +170,16 @@ public class Ovni extends Personaje{
 		
 		synchronized(m.getOvnis()) {
 		if(app.dist(j.getPos().x, j.getPos().y, pos.x, pos.y) < 45) {
-			j.setEstrella(j.getEstrellas()+2);
-			j.setEstrellasTotal(j.getEstrellasTotal()+2);
-			j.setContOvnis(j.getContOvnis()+1);
+			if(modo == 1) {
+				j.setEstrella(j.getEstrellas()+2);
+				j.setEstrellasTotal(j.getEstrellasTotal()+2);
+				j.setContOvnis(j.getContOvnis()+1);
+			}else {
+				MundoCooperativo mc = ((MundoCooperativo)m);
+				mc.setEstrellas(mc.getEstrellas()+2);
+				mc.setEstrellasTotal(mc.getEstrellasTotal()+2);
+				mc.setContadorOvnis(mc.getContadorOvnis()+1);
+			}
 			vivo = false;
 			m.getOvnis().remove(this);
 			}

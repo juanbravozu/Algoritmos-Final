@@ -11,7 +11,7 @@ import processing.sound.SoundFile;
 public abstract class Mundo extends Thread {
 	protected PApplet app;
 	protected Jugador[] j;
-	protected PImage fondo;
+	protected PImage[] fondo;
 	protected PImage interfaz;
 	protected LinkedList<Ovni> ovnis;
 	protected LinkedList<Recogible> objetos;
@@ -23,6 +23,8 @@ public abstract class Mundo extends Thread {
 	protected boolean vivo;
 	protected boolean ganar;
 	protected boolean matar;
+	protected int contEclipse;
+	protected int opEclipse;
 	
 	public Mundo(PApplet app) {
 		this.app = app;
@@ -36,14 +38,18 @@ public abstract class Mundo extends Thread {
 		matar = false;
 		ovnis = new LinkedList<Ovni>();
 		objetos = new LinkedList<Recogible>();
-		fondo = app.loadImage("fondo1.png");
-		interfaz = app.loadImage("Interfaz1.png");
+		fondo = new PImage[3];
+		for (int i = 0; i < fondo.length; i++) {
+			fondo[i] = app.loadImage("fondo"+i+".png");
+		}
 		contadorOvni = 0;
 		contadorObj = 100;
 		mali = app.loadFont("maliB_28.vlw");
 		mus = new SoundFile(app, "musicaJuego.wav");
 		mus.play();
 		contadorTiempo = app.millis()+90000;
+		contEclipse = 0;
+		opEclipse = 0;
 	}
 
 	public void run() {
@@ -66,20 +72,15 @@ public abstract class Mundo extends Thread {
 					}
 					
 				}
+				validarObj();
 				
-				Iterator<Recogible> it = objetos.iterator();
-				while(it.hasNext()) {
-					Recogible o = it.next();
-					if(j[0].validarObj(o) || j[1].validarObj(o)) {
-						it.remove();
-					}
-					
-					if(o instanceof Cometa && ((Cometa)o).borrar()) {
-						it.remove();
-					}
-				}
 			}
-					
+			if(contEclipse > app.millis() && opEclipse < 230) {
+				opEclipse += 3;
+				
+			}else if(contEclipse < app.millis() && opEclipse >= 0) {
+				opEclipse -= 3;
+			}
 			contadorOvni++;
 			contadorObj++;
 			
@@ -92,9 +93,16 @@ public abstract class Mundo extends Thread {
 		}
 	}
 	
+	public abstract void pintar();
+	
 	public abstract boolean terminarJuego();
 	
+	public abstract void validarObj();
+	
 	public abstract void crearOvnis();
+	
+	public abstract void tecla();
+	
 	public void pararMus() {
 		if(mus.isPlaying()) {
 			mus.stop();
@@ -127,4 +135,14 @@ public abstract class Mundo extends Thread {
 	public void setMatar(boolean b) {
 		 matar = b;
 	}
+
+	public int getContEclipse() {
+		return contEclipse;
+	}
+
+	public void setContEclipse(int contEclipse) {
+		this.contEclipse = contEclipse;
+	}
+	
+	
 }
