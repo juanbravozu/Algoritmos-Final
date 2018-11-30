@@ -46,6 +46,7 @@ public class Jugador extends Personaje{
 		estrellasTotal = 0;
 		cometasTotal = 0;
 		cometa = 0;
+		estrellas = 1000000;
 		contEfecto = 0;	
 	}
 

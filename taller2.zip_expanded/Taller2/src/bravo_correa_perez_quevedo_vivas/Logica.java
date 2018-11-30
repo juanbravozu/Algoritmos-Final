@@ -34,7 +34,7 @@ public class Logica {
 		m = null;
 		pantalla = 0;
 		mali = app.loadFont("maliB_47.vlw");
-		menus = new PImage[16];
+		menus = new PImage[19];
 		for(int i = 0; i < menus.length; i++) {
 			menus[i] = app.loadImage("menu" + i + ".png");
 		}

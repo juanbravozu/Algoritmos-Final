@@ -35,7 +35,7 @@ public abstract class Mundo extends Thread {
 		ganar = false;
 		matar = false;
 		ovnis = new LinkedList<Ovni>();
-		Ovni o = new Ovni(app, this);
+		Ovni o = new Ovni(app, this, 0);
 		o.start();
 		ovnis.add(o);
 		objetos = new LinkedList<Recogible>();
@@ -54,22 +54,34 @@ public abstract class Mundo extends Thread {
 			synchronized(ovnis) {
 				//Crear Ovnis
 				if(contadorOvni % 180 == 0) {
-					Ovni o = new Ovni(app, this);
-					o.start();
-					ovnis.add(o);
+					if(contadorOvni < 1800) {
+						Ovni o = new Ovni(app, this, 0);
+						o.start();
+						ovnis.add(o);
+					}else if(contadorOvni >= 1800 && contadorOvni < 3600) {
+						Ovni o = new Ovni(app, this, 1);
+						o.start();
+						ovnis.add(o);
+					} else {
+						Ovni o = new Ovni(app, this, 2);
+						o.start();
+						ovnis.add(o);
+					}
 				}
 			}
 
 			synchronized(objetos) {
 				if(contadorObj % 60 == 0) {
-					int ran = (int)app.random(20);
-					if(ran == 0) {
+					int ran = (int)app.random(25);
+					if(ran == 0 && contadorObj > 3600) {
 						objetos.add(new Agujero(app));
 					} else if(ran == 1) {
 						Cometa c = new Cometa(app);
 						c.getH().start();
 						objetos.add(c);
-					}else {
+					}else if(ran == 2 && contadorObj > 1800){
+						objetos.add(new Eclipse(app));
+					} else {
 						objetos.add(new Estrella(app));
 					}
 					

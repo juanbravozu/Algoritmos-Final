@@ -19,7 +19,7 @@ public class Ovni extends Personaje{
 	private boolean huir;
 	private int atacar;
 	
-	public Ovni(PApplet app, Mundo m) {
+	public Ovni(PApplet app, Mundo m, int nivel) {
 		super(app);
 		this.m = m;
 		this.app = app;
@@ -44,16 +44,15 @@ public class Ovni extends Personaje{
 		}
 
 		pos = new PVector(x, y);
-		ovni = app.loadImage("ovni.png");
+		ovni = app.loadImage("ovni"+nivel+".png");
 		
-		velmax = 5;
-		fmax = 0.2f;
+		velmax = 5 + nivel;
+		fmax = 0.2f + (nivel/10);
 		ang = 0;
 		entrar = false;
 		huir = false;
 		atacar = 0;
 		
-		img = app.loadImage("ovni.png");
 	}
 
 	public void run() {
@@ -103,7 +102,7 @@ public class Ovni extends Personaje{
 		app.textFont(mali);
 		app.text(estrellas, 35, 15);
 		app.rotate(ang);
-		app.image(img, 0, 0);
+		app.image(ovni, 0, 0);
 		app.popMatrix();
 	}
 	

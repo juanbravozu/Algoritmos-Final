@@ -77,57 +77,6 @@ public class MundoVersus extends Mundo {
 		
 	}
 	
-	public void run() {
-		while(vivo) {
-			synchronized(ovnis) {
-				//Crear Ovnis
-				if(contadorOvni % 180 == 0) {
-					Ovni o = new Ovni(app, this);
-					o.start();
-					ovnis.add(o);
-				}
-			}
-
-			synchronized(objetos) {
-				if(contadorObj % 60 == 0) {
-					int ran = (int)app.random(20);
-					if(ran == 0) {
-						objetos.add(new Agujero(app));
-					} else if(ran == 1) {
-						Cometa c = new Cometa(app);
-						c.getH().start();
-						objetos.add(c);
-					}else {
-						objetos.add(new Estrella(app));
-					}
-					
-				}
-				
-				Iterator<Recogible> it = objetos.iterator();
-				while(it.hasNext()) {
-					Recogible o = it.next();
-					if(j[0].validarObj(o) || j[1].validarObj(o)) {
-						it.remove();
-					}
-					
-					if(o instanceof Cometa && ((Cometa)o).borrar()) {
-						it.remove();
-					}
-				}
-			}
-					
-			contadorOvni++;
-			contadorObj++;
-			
-			try {
-				sleep(16);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public boolean terminarJuego() {
 		if(contadorTiempo-app.millis() <= 0) {
 			mus.stop();
