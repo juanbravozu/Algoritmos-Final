@@ -120,9 +120,14 @@ public class MundoVersus extends Mundo {
 		}
 		
 		if(app.key == '1') {
-			j[0].usarCometa();
-			j[1].usarCometa();
+			j[0].usarCometa(j[0].getEstrellas());
+			j[1].usarCometa(j[1].getEstrellas());
 		}
+	}
+	
+	public void crearOvnis() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	//Referencias a las variables y objetos a partir de aquí
@@ -153,6 +158,7 @@ public class MundoVersus extends Mundo {
 	public void setMatar(boolean b) {
 		 matar = b;
 	}
+
 }
 	
 

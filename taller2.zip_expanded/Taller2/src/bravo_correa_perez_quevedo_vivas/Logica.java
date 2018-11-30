@@ -27,6 +27,7 @@ public class Logica {
 	 * Pantalla 5 - Inst4
 	 * Pantalla 6 - Ganaste
 	 * Pantalla 7 - Perdiste
+	 * Pantalla 8 - Seleccion modo
 	 */
 	
 	public Logica(PApplet app) {
@@ -51,8 +52,7 @@ public class Logica {
 			break;
 		
 		case 1:
-			if(m == null) {
-				m = new MundoCooperativo(app);
+			if(m.getState().name().equals("NEW")) {
 				m.start();
 			}
 			m.pintar();
@@ -103,6 +103,10 @@ public class Logica {
 			app.text(agujeros, 818.3f, 450.92f);
 			app.text(cometas, 452.18f, 450.92f);
 			break;
+			
+		case 8:
+			interaccionSeleccion();
+			
 		}
 		interInstru();
 		app.stroke(255,100);
@@ -123,6 +127,20 @@ public class Logica {
 			app.image(menus[3], posX, posY);
 		}else {
 			app.image(menus[0], posX, posY);
+		}
+	}
+	
+	public void interaccionSeleccion() {
+		int x = app.mouseX;
+		int y = app.mouseY;
+		float posX = app.width/2;
+		float posY = app.height/2;
+		if(x > 130.64f && y > 293.47f && x < 550.62f && y < 500.89f){
+			app.image(menus[17], posX, posY);
+		} else if(x > 649.88f && y > 293.47f && x < 1069.86f && y < 500.89f) {
+			app.image(menus[18], posX, posY);
+		} else {
+			app.image(menus[16], posX, posY);
 		}
 	}
 	
@@ -200,7 +218,7 @@ public class Logica {
 		switch(pantalla) {
 		case 0:
 			if(x > posX - 72.82f && x < posX + 72.67f && y > posY + 86.75f && y < posY + 145.16f){
-				pantalla = 1;
+				pantalla = 8;
 			} else if(x > posX - 158.29f && x < posX + 161.94f && y > posY + 161.94f && y < posY + 207.66f){
 				pantalla = 2;
 			} else if(x > posX - 56.32f && x < posX + 56.55f && y > posY + 236.77f && y < posY + 283.98f) {
@@ -231,7 +249,7 @@ public class Logica {
 			
 		case 5:			
 			if(x > posX - 69.16f && x < posX + 70.97f && y > posY + 218.9f && y < posY + 272.66f) {
-				pantalla = 1;
+				pantalla = 8;
 			}
 			break;
 			
@@ -246,6 +264,15 @@ public class Logica {
 				pantalla = 0;
 			}
 			break;
+			
+		case 8:
+			if(x > 130.64f && y > 293.47f && x < 550.62f && y < 500.89f){
+				m = new MundoCooperativo(app);
+				pantalla = 1;
+			} else if(x > 649.88f && y > 293.47f && x < 1069.86f && y < 500.89f) {
+				m = new MundoCooperativo(app);
+				pantalla = 1;
+			}
 		}
 	}
 	

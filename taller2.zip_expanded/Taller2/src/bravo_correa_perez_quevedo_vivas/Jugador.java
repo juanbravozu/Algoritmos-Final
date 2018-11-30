@@ -160,12 +160,14 @@ public class Jugador extends Personaje{
 	
 
 	
-	public void usarCometa() {
-		if(estrellas >= 5 && cometa > 0) {
+	public int usarCometa(int e) {
+		if(e >= 5 && cometa > 0) {
 			cometaMas = true;
-			estrellas -= 5;
 			contEfecto = app.millis() + 5000;
 			cometa--;
+			return e -= 5;
+		} else {
+			return 0;
 		}
 	}
 	

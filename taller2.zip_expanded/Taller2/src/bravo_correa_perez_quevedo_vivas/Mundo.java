@@ -35,9 +35,6 @@ public abstract class Mundo extends Thread {
 		ganar = false;
 		matar = false;
 		ovnis = new LinkedList<Ovni>();
-		Ovni o = new Ovni(app, this, 0);
-		o.start();
-		ovnis.add(o);
 		objetos = new LinkedList<Recogible>();
 		fondo = app.loadImage("fondo1.png");
 		interfaz = app.loadImage("Interfaz1.png");
@@ -51,25 +48,8 @@ public abstract class Mundo extends Thread {
 
 	public void run() {
 		while(vivo) {
-			synchronized(ovnis) {
-				//Crear Ovnis
-				if(contadorOvni % 180 == 0) {
-					if(contadorOvni < 1800) {
-						Ovni o = new Ovni(app, this, 0);
-						o.start();
-						ovnis.add(o);
-					}else if(contadorOvni >= 1800 && contadorOvni < 3600) {
-						Ovni o = new Ovni(app, this, 1);
-						o.start();
-						ovnis.add(o);
-					} else {
-						Ovni o = new Ovni(app, this, 2);
-						o.start();
-						ovnis.add(o);
-					}
-				}
-			}
-
+			
+			crearOvnis();
 			synchronized(objetos) {
 				if(contadorObj % 60 == 0) {
 					int ran = (int)app.random(25);
@@ -112,31 +92,9 @@ public abstract class Mundo extends Thread {
 		}
 	}
 	
-	public boolean terminarJuego() {
-		if(contadorTiempo-app.millis() <= 0) {
-			mus.stop();
-			Ovni o = null;
-			Iterator<Ovni> it = ovnis.iterator();
-			if(it.hasNext()) {
-				o = it.next();
-			}
-			while(it.hasNext()) {
-				Ovni obj = it.next();
-				
-				if(o.getEstrellas()-obj.getEstrellas() <= 0) {
-					o = obj;
-				}
-			}
-			if(o.getEstrellas() - j[0].getEstrellas() <= 0) {
-				ganar = true;
-			}
-			
-			return true;
-		} else {
-			return false;
-		}
-	}
+	public abstract boolean terminarJuego();
 	
+	public abstract void crearOvnis();
 	public void pararMus() {
 		if(mus.isPlaying()) {
 			mus.stop();

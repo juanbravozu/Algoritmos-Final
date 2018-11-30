@@ -18,11 +18,13 @@ public class Ovni extends Personaje{
 	private boolean entrar;
 	private boolean huir;
 	private int atacar;
+	private int modo;
 	
-	public Ovni(PApplet app, Mundo m, int nivel) {
+	public Ovni(PApplet app, Mundo m, int nivel, int modo) {
 		super(app);
 		this.m = m;
 		this.app = app;
+		this.modo = modo;
 		j = m.getJ();
 		vel.set(j[0].getPos());
 		mali = app.loadFont("maliB_18.vlw");
@@ -127,11 +129,19 @@ public class Ovni extends Personaje{
 					} else  {
 						for(int i = 0; i < 2; i++) {
 							if(o instanceof Agujero) {
-							
-								if(j[i].getEstrellas() - 15 >= 0 ) {
-									j[i].setEstrella(j[i].getEstrellas()-15);
+								if(modo == 0) {
+									MundoCooperativo mc = ((MundoCooperativo)m);
+									if(mc.getEstrellas() - 15 >= 0 ) {
+										mc.setEstrellas(mc.getEstrellas()-15);
+									} else {
+										mc.setEstrellas(0);
+									}
 								} else {
-									j[i].setEstrella(0);
+									if(j[i].getEstrellas() - 15 >= 0 ) {
+										j[i].setEstrella(j[i].getEstrellas()-15);
+									} else {
+										j[i].setEstrella(0);
+									}
 								}
 							} else if(o instanceof Cometa) {
 								j[i].setCometaMenos(true);
@@ -170,14 +180,27 @@ public class Ovni extends Personaje{
 	public void perseguirJugador(Jugador j) {
 		perseguir(j.getPos());
 		if(app.dist(j.getPos().x, j.getPos().y, pos.x, pos.y) < 45 && atacar > 60) {
-			if(j.getEstrellas() > 0) {
-				if(j.getEstrellas()-5 >= 0) {
-					j.setEstrella(j.getEstrellas()-5);					
+			if(modo == 0) {
+				MundoCooperativo mc = ((MundoCooperativo)m);
+				if(mc.getEstrellas() > 0) {
+					if(mc.getEstrellas()-5 >= 0) {
+						mc.setEstrellas(mc.getEstrellas()-5);					
+					} else {
+						mc.setEstrellas(0);
+					}
 				} else {
-					j.setEstrella(0);
+					m.setMatar(true);
 				}
 			} else {
-				m.setMatar(true);
+				if(j.getEstrellas() > 0) {
+					if(j.getEstrellas()-5 >= 0) {
+						j.setEstrella(j.getEstrellas()-5);					
+					} else {
+						j.setEstrella(0);
+					}
+				} else {
+					m.setMatar(true);
+				}
 			}
 			estrellas += 2;
 			atacar = 0;

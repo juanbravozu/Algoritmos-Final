@@ -10,8 +10,14 @@ import processing.sound.SoundFile;
 
 public class MundoCooperativo extends Mundo {
 
+	private int estrellas;
+	
 	public MundoCooperativo(PApplet app) {
 		super(app);
+		estrellas = 0;
+		Ovni o = new Ovni(app, this, 0, 0);
+		o.start();
+		ovnis.add(o);
 	}
 	
 	public void pintar() {
@@ -74,8 +80,54 @@ public class MundoCooperativo extends Mundo {
 		}
 		
 		if(app.key == '1') {
-			j[0].usarCometa();
-			j[1].usarCometa();
+			estrellas = j[0].usarCometa(estrellas);
+			estrellas = j[1].usarCometa(estrellas + 5);
+		}
+	}
+	
+	public void crearOvnis() {
+		synchronized(ovnis) {
+			//Crear Ovnis
+			if(contadorOvni % 180 == 0) {
+				if(contadorOvni < 1800) {
+					Ovni o = new Ovni(app, this, 0, 0);
+					o.start();
+					ovnis.add(o);
+				}else if(contadorOvni >= 1800 && contadorOvni < 3600) {
+					Ovni o = new Ovni(app, this, 1, 0);
+					o.start();
+					ovnis.add(o);
+				} else {
+					Ovni o = new Ovni(app, this, 2, 0);
+					o.start();
+					ovnis.add(o);
+				}
+			}
+		}
+	}
+	
+	public boolean terminarJuego() {
+		if(contadorTiempo-app.millis() <= 0) {
+			mus.stop();
+			Ovni o = null;
+			Iterator<Ovni> it = ovnis.iterator();
+			if(it.hasNext()) {
+				o = it.next();
+			}
+			while(it.hasNext()) {
+				Ovni obj = it.next();
+				
+				if(o.getEstrellas()-obj.getEstrellas() <= 0) {
+					o = obj;
+				}
+			}
+			if(o.getEstrellas() - estrellas <= 0) {
+				ganar = true;
+			}
+			
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -83,6 +135,14 @@ public class MundoCooperativo extends Mundo {
 	
 	public LinkedList<Recogible> getObjetos() {
 		return objetos;
+	}
+	
+	public int getEstrellas() {
+		return estrellas;
+	}
+	
+	public void setEstrellas(int e) {
+		estrellas = e;
 	}
 	
 	public LinkedList<Ovni> getOvnis() {
